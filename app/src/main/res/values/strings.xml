@@ -1,0 +1,17 @@
+<resources>
+  <string name="app_name">BasicKnowledge</string>
+  <string name="tab_text_draw">DrawXXX</string>
+  <string name="tab_text_2">Tab 2</string>
+
+  <string-array name="tab_draw_chip">
+    <item>drawColor</item>
+    <item>drawCircle</item>
+    <item>drawRect</item>
+    <item>drawPoint</item>
+    <item>drawOval</item>
+    <item>drawLine</item>
+    <item>drawRoundRect</item>
+    <item>drawArc</item>
+    <item>drawPath</item>
+  </string-array>
+</resources>
