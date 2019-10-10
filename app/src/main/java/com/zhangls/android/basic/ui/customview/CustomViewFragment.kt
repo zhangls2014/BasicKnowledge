@@ -6,13 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEach
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
-
 import com.zhangls.android.basic.R
 import com.zhangls.android.basic.util.dpToPxInt
 import kotlinx.android.synthetic.main.fragment_custom_view.*
@@ -56,7 +53,11 @@ class CustomViewFragment : Fragment() {
     }
     val chipNormalBackgroundColor = ContextCompat.getColorStateList(view.context, R.color.colorChipDefault)
     val chipCheckedBackgroundColor = ContextCompat.getColorStateList(view.context, R.color.colorPrimary)
-    val chips = resources.getStringArray(R.array.tab_draw_chip)
+    val chips = if (tabTitle == R.string.tab_text_draw) {
+      resources.getStringArray(R.array.tab_draw_chip)
+    } else {
+      resources.getStringArray(R.array.tab_paint_chip)
+    }
     chips.forEach {
       val chip = Chip(view.context)
       chip.text = it
@@ -77,27 +78,50 @@ class CustomViewFragment : Fragment() {
       chipGroup.addView(chip)
     }
 
-    val chip = chipGroup[0]
-    if (chip is Chip) {
-      chip.isChecked = true
-    }
-
     chipGroup.setOnCheckedChangeListener { chipGroup, checkedId ->
       chipGroup.forEachIndexed { index, view ->
         if (view.id == checkedId) {
-          when (index) {
-            0 -> customView.setDrawType(CustomView.DrawType.Color)
-            1 -> customView.setDrawType(CustomView.DrawType.Circle)
-            2 -> customView.setDrawType(CustomView.DrawType.Rect)
-            3 -> customView.setDrawType(CustomView.DrawType.Point)
-            4 -> customView.setDrawType(CustomView.DrawType.Oval)
-            5 -> customView.setDrawType(CustomView.DrawType.Line)
-            6 -> customView.setDrawType(CustomView.DrawType.RoundRect)
-            7 -> customView.setDrawType(CustomView.DrawType.Arc)
-            8 -> customView.setDrawType(CustomView.DrawType.Path)
+          if (tabTitle == R.string.tab_text_draw) {
+            when (index) {
+              0 -> customView.setDrawType(CustomView.DrawType.Color)
+              1 -> customView.setDrawType(CustomView.DrawType.Circle)
+              2 -> customView.setDrawType(CustomView.DrawType.Rect)
+              3 -> customView.setDrawType(CustomView.DrawType.Point)
+              4 -> customView.setDrawType(CustomView.DrawType.Oval)
+              5 -> customView.setDrawType(CustomView.DrawType.Line)
+              6 -> customView.setDrawType(CustomView.DrawType.RoundRect)
+              7 -> customView.setDrawType(CustomView.DrawType.Arc)
+              8 -> customView.setDrawType(CustomView.DrawType.Path)
+              else -> customView.setDrawType(CustomView.DrawType.Color)
+            }
+          } else if (tabTitle == R.string.tab_text_paint) {
+            when (index) {
+              0 -> customView.setPaintType(CustomView.PaintType.LinearGradient)
+              1 -> customView.setPaintType(CustomView.PaintType.RadialGradient)
+              2 -> customView.setPaintType(CustomView.PaintType.SweepGradient)
+              3 -> customView.setPaintType(CustomView.PaintType.BitmapShader)
+              4 -> customView.setPaintType(CustomView.PaintType.ComposeShader)
+              5 -> customView.setPaintType(CustomView.PaintType.LightingColorFilter)
+              6 -> customView.setPaintType(CustomView.PaintType.ColorMatrixColorFilter)
+              7 -> customView.setPaintType(CustomView.PaintType.Xfermode)
+              8 -> customView.setPaintType(CustomView.PaintType.StrokeCap)
+              9 -> customView.setPaintType(CustomView.PaintType.StrokeJoin)
+              10 -> customView.setPaintType(CustomView.PaintType.StrokeMiter)
+              11 -> customView.setPaintType(CustomView.PaintType.PathEffect)
+              12 -> customView.setPaintType(CustomView.PaintType.ShadowLayer)
+              13 -> customView.setPaintType(CustomView.PaintType.MaskFilter)
+              14 -> customView.setPaintType(CustomView.PaintType.FillPath)
+              15 -> customView.setPaintType(CustomView.PaintType.TextPath)
+              else -> customView.setPaintType(CustomView.PaintType.LinearGradient)
+            }
           }
         }
       }
+    }
+
+    val chip = chipGroup[0]
+    if (chip is Chip) {
+      chip.isChecked = true
     }
   }
 }

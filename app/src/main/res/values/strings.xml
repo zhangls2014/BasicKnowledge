@@ -1,7 +1,7 @@
 <resources>
   <string name="app_name">BasicKnowledge</string>
   <string name="tab_text_draw">DrawXXX</string>
-  <string name="tab_text_2">Tab 2</string>
+  <string name="tab_text_paint">Paint</string>
 
   <string-array name="tab_draw_chip">
     <item>drawColor</item>
@@ -13,5 +13,24 @@
     <item>drawRoundRect</item>
     <item>drawArc</item>
     <item>drawPath</item>
+  </string-array>
+
+  <string-array name="tab_paint_chip">
+    <item>LinearGradient</item>
+    <item>RadialGradient</item>
+    <item>SweepGradient</item>
+    <item>BitmapShader</item>
+    <item>ComposeShader</item>
+    <item>LightingColorFilter</item>
+    <item>ColorMatrixColorFilter</item>
+    <item>Xfermode</item>
+    <item>StrokeCap</item>
+    <item>StrokeJoin</item>
+    <item>StrokeMiter</item>
+    <item>PathEffect</item>
+    <item>ShadowLayer</item>
+    <item>MaskFilter</item>
+    <item>FillPath</item>
+    <item>TextPath</item>
   </string-array>
 </resources>
