@@ -6,7 +6,7 @@
   android:orientation="vertical"
   tools:context=".ui.customview.CustomViewFragment">
 
-  <com.zhangls.android.basic.ui.customview.CustomView
+  <FrameLayout
     android:id="@+id/customView"
     android:layout_width="match_parent"
     android:layout_height="300dp" />

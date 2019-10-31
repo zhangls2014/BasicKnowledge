@@ -2,6 +2,7 @@
   <string name="app_name">BasicKnowledge</string>
   <string name="tab_text_draw">DrawXXX</string>
   <string name="tab_text_paint">Paint</string>
+  <string name="tab_text_text">Text</string>
 
   <string-array name="tab_draw_chip">
     <item>drawColor</item>
@@ -32,5 +33,18 @@
     <item>MaskFilter</item>
     <item>FillPath</item>
     <item>TextPath</item>
+  </string-array>
+
+  <string-array name="tab_text_chip">
+    <item>drawText</item>
+    <item>StaticLayout</item>
+    <item>setTextSize</item>
+    <item>setTypeface</item>
+    <item>setFakeBoldText</item>
+    <item>setStrikeThruText</item>
+    <item>setUnderlineText</item>
+    <item>setTextSkewX</item>
+    <item>setTextScaleX</item>
+    <item>setTextAlign</item>
   </string-array>
 </resources>

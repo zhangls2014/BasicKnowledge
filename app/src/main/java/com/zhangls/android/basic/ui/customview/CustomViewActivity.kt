@@ -17,7 +17,7 @@ open class CustomViewActivity : AppCompatActivity() {
 
   companion object {
     @StringRes
-    val TAB_TITLES = intArrayOf(R.string.tab_text_draw, R.string.tab_text_paint)
+    val TAB_TITLES = intArrayOf(R.string.tab_text_draw, R.string.tab_text_paint, R.string.tab_text_text)
 
     fun actionStart(context: Context) {
       val intent = Intent(context, CustomViewActivity::class.java)
@@ -29,13 +29,15 @@ open class CustomViewActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_custom_view)
 
-    viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
       override fun getItem(position: Int): Fragment = CustomViewFragment.newInstance(TAB_TITLES[position])
 
       override fun getCount(): Int = TAB_TITLES.size
 
       override fun getPageTitle(position: Int): CharSequence? = getString(TAB_TITLES[position])
     }
+    viewPager.offscreenPageLimit = TAB_TITLES.size
     tabs.setupWithViewPager(viewPager)
   }
 }

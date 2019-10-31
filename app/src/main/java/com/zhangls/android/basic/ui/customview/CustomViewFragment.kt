@@ -46,6 +46,15 @@ class CustomViewFragment : Fragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    context?.let {
+      when (tabTitle) {
+        R.string.tab_text_draw -> customView.addView(CustomDrawView(it))
+        R.string.tab_text_paint -> customView.addView(CustomPaintView(it))
+        R.string.tab_text_text -> customView.addView(CustomTextView(it))
+        else -> customView.addView(CustomDrawView(it))
+      }
+    }
+
     chipGroup.apply {
       isSingleSelection = true
       chipSpacingHorizontal = 16.dpToPxInt
@@ -53,10 +62,11 @@ class CustomViewFragment : Fragment() {
     }
     val chipNormalBackgroundColor = ContextCompat.getColorStateList(view.context, R.color.colorChipDefault)
     val chipCheckedBackgroundColor = ContextCompat.getColorStateList(view.context, R.color.colorPrimary)
-    val chips = if (tabTitle == R.string.tab_text_draw) {
-      resources.getStringArray(R.array.tab_draw_chip)
-    } else {
-      resources.getStringArray(R.array.tab_paint_chip)
+    val chips = when (tabTitle) {
+      R.string.tab_text_draw -> resources.getStringArray(R.array.tab_draw_chip)
+      R.string.tab_text_paint -> resources.getStringArray(R.array.tab_paint_chip)
+      R.string.tab_text_text -> resources.getStringArray(R.array.tab_text_chip)
+      else -> resources.getStringArray(R.array.tab_draw_chip)
     }
     chips.forEach {
       val chip = Chip(view.context)
@@ -71,7 +81,7 @@ class CustomViewFragment : Fragment() {
         rippleColor = null
         chipBackgroundColor = chipNormalBackgroundColor
         setOnCheckedChangeListener { _, b ->
-          chip.chipBackgroundColor =  if (b) chipCheckedBackgroundColor else chipNormalBackgroundColor
+          chip.chipBackgroundColor = if (b) chipCheckedBackgroundColor else chipNormalBackgroundColor
         }
       }
 
@@ -81,39 +91,10 @@ class CustomViewFragment : Fragment() {
     chipGroup.setOnCheckedChangeListener { chipGroup, checkedId ->
       chipGroup.forEachIndexed { index, view ->
         if (view.id == checkedId) {
-          if (tabTitle == R.string.tab_text_draw) {
-            when (index) {
-              0 -> customView.setDrawType(CustomView.DrawType.Color)
-              1 -> customView.setDrawType(CustomView.DrawType.Circle)
-              2 -> customView.setDrawType(CustomView.DrawType.Rect)
-              3 -> customView.setDrawType(CustomView.DrawType.Point)
-              4 -> customView.setDrawType(CustomView.DrawType.Oval)
-              5 -> customView.setDrawType(CustomView.DrawType.Line)
-              6 -> customView.setDrawType(CustomView.DrawType.RoundRect)
-              7 -> customView.setDrawType(CustomView.DrawType.Arc)
-              8 -> customView.setDrawType(CustomView.DrawType.Path)
-              else -> customView.setDrawType(CustomView.DrawType.Color)
-            }
-          } else if (tabTitle == R.string.tab_text_paint) {
-            when (index) {
-              0 -> customView.setPaintType(CustomView.PaintType.LinearGradient)
-              1 -> customView.setPaintType(CustomView.PaintType.RadialGradient)
-              2 -> customView.setPaintType(CustomView.PaintType.SweepGradient)
-              3 -> customView.setPaintType(CustomView.PaintType.BitmapShader)
-              4 -> customView.setPaintType(CustomView.PaintType.ComposeShader)
-              5 -> customView.setPaintType(CustomView.PaintType.LightingColorFilter)
-              6 -> customView.setPaintType(CustomView.PaintType.ColorMatrixColorFilter)
-              7 -> customView.setPaintType(CustomView.PaintType.Xfermode)
-              8 -> customView.setPaintType(CustomView.PaintType.StrokeCap)
-              9 -> customView.setPaintType(CustomView.PaintType.StrokeJoin)
-              10 -> customView.setPaintType(CustomView.PaintType.StrokeMiter)
-              11 -> customView.setPaintType(CustomView.PaintType.PathEffect)
-              12 -> customView.setPaintType(CustomView.PaintType.ShadowLayer)
-              13 -> customView.setPaintType(CustomView.PaintType.MaskFilter)
-              14 -> customView.setPaintType(CustomView.PaintType.FillPath)
-              15 -> customView.setPaintType(CustomView.PaintType.TextPath)
-              else -> customView.setPaintType(CustomView.PaintType.LinearGradient)
-            }
+          when (tabTitle) {
+            R.string.tab_text_draw -> clickDrawChip(index)
+            R.string.tab_text_paint -> clickPaintChip(index)
+            R.string.tab_text_text -> clickTextChip(index)
           }
         }
       }
@@ -122,6 +103,67 @@ class CustomViewFragment : Fragment() {
     val chip = chipGroup[0]
     if (chip is Chip) {
       chip.isChecked = true
+    }
+  }
+
+  private fun clickDrawChip(index: Int) {
+    val customDrawView = customView.getChildAt(0)
+    if (customDrawView is CustomDrawView) {
+      when (index) {
+        0 -> customDrawView.setDrawType(CustomDrawView.DrawType.Color)
+        1 -> customDrawView.setDrawType(CustomDrawView.DrawType.Circle)
+        2 -> customDrawView.setDrawType(CustomDrawView.DrawType.Rect)
+        3 -> customDrawView.setDrawType(CustomDrawView.DrawType.Point)
+        4 -> customDrawView.setDrawType(CustomDrawView.DrawType.Oval)
+        5 -> customDrawView.setDrawType(CustomDrawView.DrawType.Line)
+        6 -> customDrawView.setDrawType(CustomDrawView.DrawType.RoundRect)
+        7 -> customDrawView.setDrawType(CustomDrawView.DrawType.Arc)
+        8 -> customDrawView.setDrawType(CustomDrawView.DrawType.Path)
+        else -> customDrawView.setDrawType(CustomDrawView.DrawType.Color)
+      }
+    }
+  }
+
+  private fun clickPaintChip(index: Int) {
+    val customPaintView = customView.getChildAt(0)
+    if (customPaintView is CustomPaintView) {
+      when (index) {
+        0 -> customPaintView.setPaintType(CustomPaintView.PaintType.LinearGradient)
+        1 -> customPaintView.setPaintType(CustomPaintView.PaintType.RadialGradient)
+        2 -> customPaintView.setPaintType(CustomPaintView.PaintType.SweepGradient)
+        3 -> customPaintView.setPaintType(CustomPaintView.PaintType.BitmapShader)
+        4 -> customPaintView.setPaintType(CustomPaintView.PaintType.ComposeShader)
+        5 -> customPaintView.setPaintType(CustomPaintView.PaintType.LightingColorFilter)
+        6 -> customPaintView.setPaintType(CustomPaintView.PaintType.ColorMatrixColorFilter)
+        7 -> customPaintView.setPaintType(CustomPaintView.PaintType.Xfermode)
+        8 -> customPaintView.setPaintType(CustomPaintView.PaintType.StrokeCap)
+        9 -> customPaintView.setPaintType(CustomPaintView.PaintType.StrokeJoin)
+        10 -> customPaintView.setPaintType(CustomPaintView.PaintType.StrokeMiter)
+        11 -> customPaintView.setPaintType(CustomPaintView.PaintType.PathEffect)
+        12 -> customPaintView.setPaintType(CustomPaintView.PaintType.ShadowLayer)
+        13 -> customPaintView.setPaintType(CustomPaintView.PaintType.MaskFilter)
+        14 -> customPaintView.setPaintType(CustomPaintView.PaintType.FillPath)
+        15 -> customPaintView.setPaintType(CustomPaintView.PaintType.TextPath)
+        else -> customPaintView.setPaintType(CustomPaintView.PaintType.LinearGradient)
+      }
+    }
+  }
+
+  private fun clickTextChip(index: Int) {
+    val customTextView = customView.getChildAt(0)
+    if (customTextView is CustomTextView) {
+      when (index) {
+        0 -> customTextView.setTextType(CustomTextView.TextType.DrawText)
+        1 -> customTextView.setTextType(CustomTextView.TextType.StaticLayout)
+        2 -> customTextView.setTextType(CustomTextView.TextType.SetTextSize)
+        3 -> customTextView.setTextType(CustomTextView.TextType.SetTypeface)
+        4 -> customTextView.setTextType(CustomTextView.TextType.SetFakeBoldText)
+        5 -> customTextView.setTextType(CustomTextView.TextType.SetStrikeThruText)
+        6 -> customTextView.setTextType(CustomTextView.TextType.SetUnderlineText)
+        7 -> customTextView.setTextType(CustomTextView.TextType.SetTextSkewX)
+        8 -> customTextView.setTextType(CustomTextView.TextType.SetTextScaleX)
+        9 -> customTextView.setTextType(CustomTextView.TextType.SetTextAlign)
+      }
     }
   }
 }

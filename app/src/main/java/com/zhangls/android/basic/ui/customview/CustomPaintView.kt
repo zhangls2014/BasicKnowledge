@@ -12,62 +12,10 @@ import com.zhangls.android.basic.util.dpToPx
 /**
  * @author zhangls
  */
-class CustomView : View {
-  private var drawType: DrawType = DrawType.Color
+class CustomPaintView : View {
   private var paintType: PaintType = PaintType.LinearGradient
-  private var currentType: CurrentType = CurrentType.Null
   private val defaultColor: Int by lazy {
     ContextCompat.getColor(context, R.color.colorPrimary)
-  }
-  private val circlePaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 4.dpToPx
-    }
-  }
-  private val rectPaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 4.dpToPx
-    }
-  }
-  private val pointPaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 16.dpToPx
-    }
-  }
-  private val ovalPaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 4.dpToPx
-    }
-  }
-  private val linePaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 24.dpToPx
-      strokeCap = Paint.Cap.ROUND
-    }
-  }
-  private val roundRectPaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 4.dpToPx
-    }
-  }
-  private val arcPaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 4.dpToPx
-    }
-  }
-  private val pathPaint: Paint by lazy {
-    Paint().apply {
-      color = defaultColor
-      strokeWidth = 4.dpToPx
-      strokeCap = Paint.Cap.ROUND
-    }
   }
   private val shaderPaint: Paint by lazy {
     Paint().apply {
@@ -121,27 +69,7 @@ class CustomView : View {
   override fun onDraw(canvas: Canvas?) {
     super.onDraw(canvas)
 
-    canvas?.let {
-      when (currentType) {
-        CurrentType.Null -> return
-        CurrentType.Draw -> drawTypeSelect(it)
-        CurrentType.Paint -> paintTypeSelect(it)
-      }
-    }
-  }
-
-  private fun drawTypeSelect(canvas: Canvas) {
-    when (drawType) {
-      DrawType.Color -> drawColor(canvas)
-      DrawType.Circle -> drawCircle(canvas)
-      DrawType.Rect -> drawRect(canvas)
-      DrawType.Point -> drawPoint(canvas)
-      DrawType.Oval -> drawOval(canvas)
-      DrawType.Line -> drawLine(canvas)
-      DrawType.RoundRect -> drawRoundRect(canvas)
-      DrawType.Arc -> drawArc(canvas)
-      DrawType.Path -> drawPath(canvas)
-    }
+    canvas?.let { paintTypeSelect(it) }
   }
 
   private fun paintTypeSelect(canvas: Canvas) {
@@ -165,77 +93,9 @@ class CustomView : View {
     }
   }
 
-  fun setDrawType(type: DrawType) {
-    drawType = type
-    currentType = CurrentType.Draw
-    invalidate()
-  }
-
   fun setPaintType(type: PaintType) {
     paintType = type
-    currentType = CurrentType.Paint
     invalidate()
-  }
-
-  private fun drawColor(canvas: Canvas) {
-    canvas.drawColor(defaultColor)
-  }
-
-  private fun drawCircle(canvas: Canvas) {
-    circlePaint.style = Paint.Style.STROKE
-    canvas.drawCircle(200F, 200F, 100F, circlePaint)
-    circlePaint.style = Paint.Style.FILL
-    canvas.drawCircle(500F, 200F, 100F, circlePaint)
-  }
-
-  private fun drawRect(canvas: Canvas) {
-    rectPaint.style = Paint.Style.STROKE
-    canvas.drawRect(200F, 100F, 500F, 300F, rectPaint)
-    rectPaint.style = Paint.Style.FILL
-    canvas.drawRect(600F, 100F, 900F, 300F, rectPaint)
-  }
-
-  private fun drawPoint(canvas: Canvas) {
-    pointPaint.strokeCap = Paint.Cap.BUTT
-    canvas.drawPoint(100F, 100F, pointPaint)
-    pointPaint.strokeCap = Paint.Cap.SQUARE
-    canvas.drawPoint(200F, 100F, pointPaint)
-    pointPaint.strokeCap = Paint.Cap.ROUND
-    canvas.drawPoint(300F, 100F, pointPaint)
-  }
-
-  private fun drawOval(canvas: Canvas) {
-    ovalPaint.style = Paint.Style.STROKE
-    canvas.drawOval(200F, 100F, 500F, 300F, ovalPaint)
-    ovalPaint.style = Paint.Style.FILL
-    canvas.drawOval(600F, 100F, 900F, 300F, ovalPaint)
-  }
-
-  private fun drawLine(canvas: Canvas) {
-    canvas.drawLine(100F, 100F, 500F, 400F, linePaint)
-  }
-
-  private fun drawRoundRect(canvas: Canvas) {
-    roundRectPaint.style = Paint.Style.STROKE
-    canvas.drawRoundRect(200F, 100F, 500F, 300F, 72F, 72F, roundRectPaint)
-    roundRectPaint.style = Paint.Style.FILL
-    canvas.drawRoundRect(600F, 100F, 900F, 300F, 36F, 72F, roundRectPaint)
-  }
-
-  private fun drawArc(canvas: Canvas) {
-    arcPaint.style = Paint.Style.FILL
-    canvas.drawArc(200F, 100F, 900F, 500F, 15F, 150F, true, arcPaint)
-    canvas.drawArc(200F, 100F, 900F, 500F, 195F, 60F, false, arcPaint)
-    arcPaint.style = Paint.Style.STROKE
-    canvas.drawArc(200F, 100F, 900F, 500F, 285F, 60F, false, arcPaint)
-  }
-
-  private fun drawPath(canvas: Canvas) {
-    val path = Path()
-    path.addArc(100F, 100F, 400F, 400F, 150F, 210F)
-    path.arcTo(400F, 100F, 700F, 400F, 180F, 210F, false)
-    path.lineTo(400F, 700F)
-    canvas.drawPath(path, pathPaint)
   }
 
   private fun paintLinearGradient(canvas: Canvas) {
@@ -465,17 +325,6 @@ class CustomView : View {
     canvas.drawPath(dstTextPath, fillPathPaint)
   }
 
-  enum class DrawType {
-    Color,
-    Circle,
-    Rect,
-    Point,
-    Oval,
-    Line,
-    RoundRect,
-    Arc,
-    Path
-  }
 
   enum class PaintType {
     LinearGradient,
@@ -496,9 +345,4 @@ class CustomView : View {
     TextPath
   }
 
-  enum class CurrentType {
-    Null,
-    Draw,
-    Paint
-  }
 }
