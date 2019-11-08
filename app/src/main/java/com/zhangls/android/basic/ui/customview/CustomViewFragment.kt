@@ -51,6 +51,7 @@ class CustomViewFragment : Fragment() {
         R.string.tab_text_draw -> customView.addView(CustomDrawView(it))
         R.string.tab_text_paint -> customView.addView(CustomPaintView(it))
         R.string.tab_text_text -> customView.addView(CustomTextView(it))
+        R.string.tab_text_matrix -> customView.addView(CustomMatrixView(it))
         else -> customView.addView(CustomDrawView(it))
       }
     }
@@ -66,6 +67,7 @@ class CustomViewFragment : Fragment() {
       R.string.tab_text_draw -> resources.getStringArray(R.array.tab_draw_chip)
       R.string.tab_text_paint -> resources.getStringArray(R.array.tab_paint_chip)
       R.string.tab_text_text -> resources.getStringArray(R.array.tab_text_chip)
+      R.string.tab_text_matrix -> resources.getStringArray(R.array.tab_text_matrix)
       else -> resources.getStringArray(R.array.tab_draw_chip)
     }
     chips.forEach {
@@ -95,6 +97,7 @@ class CustomViewFragment : Fragment() {
             R.string.tab_text_draw -> clickDrawChip(index)
             R.string.tab_text_paint -> clickPaintChip(index)
             R.string.tab_text_text -> clickTextChip(index)
+            R.string.tab_text_matrix -> clickMatrixCHip(index)
           }
         }
       }
@@ -163,6 +166,28 @@ class CustomViewFragment : Fragment() {
         7 -> customTextView.setTextType(CustomTextView.TextType.SetTextSkewX)
         8 -> customTextView.setTextType(CustomTextView.TextType.SetTextScaleX)
         9 -> customTextView.setTextType(CustomTextView.TextType.SetTextAlign)
+      }
+    }
+  }
+
+  private fun clickMatrixCHip(index: Int) {
+    val customMatrixView = customView.getChildAt(0)
+    if (customMatrixView is CustomMatrixView) {
+      when (index) {
+        0 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.ClipRect)
+        1 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.ClipPath)
+        2 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CanvasTranslate)
+        3 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CanvasScale)
+        4 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CanvasRotate)
+        5 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CanvasSkew)
+        6 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.MatrixTranslate)
+        7 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.MatrixScale)
+        8 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.MatrixRotate)
+        9 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.MatrixSkew)
+        10 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CameraRotateXY)
+        11 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CameraRotateXYAmend)
+        12 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CameraRotateXYLocation)
+        13 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.PageFlip)
       }
     }
   }
