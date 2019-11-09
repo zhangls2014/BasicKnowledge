@@ -4,6 +4,7 @@
   <string name="tab_text_paint">Paint</string>
   <string name="tab_text_text">Text</string>
   <string name="tab_text_matrix">Matrix</string>
+  <string name="tab_text_order">绘制顺序</string>
 
   <string-array name="tab_draw_chip">
     <item>drawColor</item>
@@ -50,6 +51,23 @@
   </string-array>
 
   <string-array name="tab_text_matrix">
+    <item>clipRect</item>
+    <item>clipPath</item>
+    <item>translate</item>
+    <item >scale</item>
+    <item>rotate</item>
+    <item>skew</item>
+    <item>Matrix.translate</item>
+    <item>Matrix.scale</item>
+    <item>Matrix.rotate</item>
+    <item>Matrix.skew</item>
+    <item>Camera.rotateX/Y</item>
+    <item>Camera.rotateX/Y 修正版</item>
+    <item>Camera.rotateX/Y 糊脸修正</item>
+    <item>翻页效果</item>
+  </string-array>
+
+  <string-array name="tab_text_order">
     <item>clipRect</item>
     <item>clipPath</item>
     <item>translate</item>

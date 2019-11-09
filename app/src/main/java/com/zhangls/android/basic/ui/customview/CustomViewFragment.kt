@@ -20,6 +20,10 @@ class CustomViewFragment : Fragment() {
    * tab tabTitle
    */
   private var tabTitle = R.string.tab_text_draw
+  /**
+   * Fragment 是都被加载的标识符
+   */
+  private var isLoaded: Boolean = false
 
 
   companion object {
@@ -41,11 +45,22 @@ class CustomViewFragment : Fragment() {
     }
   }
 
+  override fun onResume() {
+    super.onResume()
+    // 如果没有初始化，则进行初始化（实现懒加载）
+    if (isLoaded.not()) {
+      isLoaded = true
+      init()
+    }
+  }
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_custom_view, container, false)
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  private fun init() {
+    val view = view!!
+
     context?.let {
       when (tabTitle) {
         R.string.tab_text_draw -> customView.addView(CustomDrawView(it))
