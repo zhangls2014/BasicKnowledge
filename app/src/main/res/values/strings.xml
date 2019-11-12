@@ -68,19 +68,13 @@
   </string-array>
 
   <string-array name="tab_text_order">
-    <item>clipRect</item>
-    <item>clipPath</item>
-    <item>translate</item>
-    <item >scale</item>
-    <item>rotate</item>
-    <item>skew</item>
-    <item>Matrix.translate</item>
-    <item>Matrix.scale</item>
-    <item>Matrix.rotate</item>
-    <item>Matrix.skew</item>
-    <item>Camera.rotateX/Y</item>
-    <item>Camera.rotateX/Y 修正版</item>
-    <item>Camera.rotateX/Y 糊脸修正</item>
-    <item>翻页效果</item>
+    <item>onDraw()-后插</item>
+    <item>onDraw()-前插</item>
+    <item>onDraw()-在 Layout 中</item>
+    <item>dispatchDraw</item>
+    <item>onDrawForeground()-后插</item>
+    <item>onDrawForeground()-前插</item>
+    <item>draw()-后插</item>
+    <item>draw()-前插</item>
   </string-array>
 </resources>

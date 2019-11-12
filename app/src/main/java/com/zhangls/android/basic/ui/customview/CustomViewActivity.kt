@@ -18,7 +18,7 @@ class CustomViewActivity : AppCompatActivity() {
 
   companion object {
     @StringRes
-    val TAB_TITLES = intArrayOf(R.string.tab_text_draw, R.string.tab_text_paint, R.string.tab_text_text, R.string.tab_text_matrix)
+    val TAB_TITLES = intArrayOf(R.string.tab_text_draw, R.string.tab_text_paint, R.string.tab_text_text, R.string.tab_text_matrix, R.string.tab_text_order)
 
     fun actionStart(context: Context) {
       val intent = Intent(context, CustomViewActivity::class.java)

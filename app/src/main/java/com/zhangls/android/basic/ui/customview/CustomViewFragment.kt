@@ -1,10 +1,14 @@
 package com.zhangls.android.basic.ui.customview
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
@@ -24,6 +28,33 @@ class CustomViewFragment : Fragment() {
    * Fragment 是都被加载的标识符
    */
   private var isLoaded: Boolean = false
+  private val imageView: CustomImageView by lazy {
+    CustomImageView(context!!).apply {
+      setImageResource(R.drawable.batman)
+    }
+  }
+  private val editText: CustomEditText by lazy {
+    CustomEditText(context!!).apply {
+      setText("zhangls\nHello World!")
+      setTextColor(ContextCompat.getColor(context, android.R.color.black))
+      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20F)
+    }
+  }
+  private val linearLayout: CustomLinearLayout by lazy {
+    CustomLinearLayout(context!!).apply {
+      orientation = LinearLayout.VERTICAL
+      layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+    }
+  }
+  private val batmanText: AppCompatTextView by lazy {
+    AppCompatTextView(context).apply {
+      layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50.dpToPxInt)
+      setTextColor(ContextCompat.getColor(context, android.R.color.black))
+      setBackgroundColor(Color.parseColor("#AAAAAA"))
+      textSize = 34F
+      text = "Batman"
+    }
+  }
 
 
   companion object {
@@ -83,6 +114,7 @@ class CustomViewFragment : Fragment() {
       R.string.tab_text_paint -> resources.getStringArray(R.array.tab_paint_chip)
       R.string.tab_text_text -> resources.getStringArray(R.array.tab_text_chip)
       R.string.tab_text_matrix -> resources.getStringArray(R.array.tab_text_matrix)
+      R.string.tab_text_order -> resources.getStringArray(R.array.tab_text_order)
       else -> resources.getStringArray(R.array.tab_draw_chip)
     }
     chips.forEach {
@@ -112,7 +144,8 @@ class CustomViewFragment : Fragment() {
             R.string.tab_text_draw -> clickDrawChip(index)
             R.string.tab_text_paint -> clickPaintChip(index)
             R.string.tab_text_text -> clickTextChip(index)
-            R.string.tab_text_matrix -> clickMatrixCHip(index)
+            R.string.tab_text_matrix -> clickMatrixChip(index)
+            R.string.tab_text_order -> clickOrderChip(index)
           }
         }
       }
@@ -185,7 +218,7 @@ class CustomViewFragment : Fragment() {
     }
   }
 
-  private fun clickMatrixCHip(index: Int) {
+  private fun clickMatrixChip(index: Int) {
     val customMatrixView = customView.getChildAt(0)
     if (customMatrixView is CustomMatrixView) {
       when (index) {
@@ -203,6 +236,57 @@ class CustomViewFragment : Fragment() {
         11 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CameraRotateXYAmend)
         12 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.CameraRotateXYLocation)
         13 -> customMatrixView.setMatrixType(CustomMatrixView.MatrixType.PageFlip)
+      }
+    }
+  }
+
+  private fun clickOrderChip(index: Int) {
+    customView.removeAllViews()
+    linearLayout.removeAllViews()
+    when (index) {
+      0 -> context?.let {
+        imageView.setOnDrawOrder(true)
+        customView.addView(imageView)
+      }
+      1 -> context?.let {
+        editText.setOnDrawOrder(true)
+        customView.addView(editText)
+      }
+      2 -> context?.let {
+        linearLayout.removeAllViews()
+        linearLayout.setOnDrawOrder(true)
+        linearLayout.setDispatchDrawOrder(false)
+        linearLayout.layoutParams = LinearLayout.LayoutParams(160.dpToPxInt, 210.dpToPxInt)
+        customView.addView(linearLayout)
+      }
+      3 -> context?.let {
+        imageView.setOnDrawOrder(false)
+        linearLayout.addView(imageView)
+        linearLayout.addView(batmanText)
+        linearLayout.setOnDrawOrder(false)
+        linearLayout.setDispatchDrawOrder(true)
+        linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        customView.addView(linearLayout)
+      }
+      4 -> context?.let {
+        imageView.setOnDrawForegroundOrder(isAfter = true, isBefore = false)
+        customView.addView(imageView)
+      }
+      5 -> context?.let {
+        imageView.setOnDrawForegroundOrder(isAfter = false, isBefore = true)
+        customView.addView(imageView)
+      }
+      6 -> context?.let {
+        imageView.setDrawOrder(isAfter = true, isBefore = false)
+        customView.addView(imageView)
+      }
+      7 -> context?.let {
+        editText.setDrawOrder(true)
+        customView.addView(editText)
+      }
+      else -> context?.let {
+        imageView.setOnDrawOrder(true)
+        customView.addView(imageView)
       }
     }
   }
