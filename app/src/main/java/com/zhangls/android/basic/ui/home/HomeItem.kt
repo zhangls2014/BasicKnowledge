@@ -6,5 +6,6 @@ package com.zhangls.android.basic.ui.home
 data class HomeItem(val type: HomeItemType, val title: String)
 
 enum class HomeItemType {
-  CustomView
+  CustomView,
+  AnimationMock
 }

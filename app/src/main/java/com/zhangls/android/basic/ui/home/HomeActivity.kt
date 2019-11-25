@@ -26,6 +26,7 @@ class HomeActivity : AppCompatActivity() {
     recycler.layoutManager = LinearLayoutManager(this)
 
     items.add(HomeItem(HomeItemType.CustomView, "自定义 View"))
+    items.add(HomeItem(HomeItemType.AnimationMock, "动画模仿"))
     adapter.notifyDataSetChanged()
   }
 }

@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".ui.customview.CustomViewActivity">
+  tools:context=".ui.mock.AnimationMockActivity">
 
   <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
@@ -14,21 +14,12 @@
     <com.google.android.material.appbar.MaterialToolbar
       android:id="@+id/toolbar"
       android:layout_width="match_parent"
-      android:layout_height="?actionBarSize"
-      app:title="@string/activity_custom_view_title" />
-
-    <com.google.android.material.tabs.TabLayout
-      android:id="@+id/tabs"
-      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="?attr/colorPrimary"
-      app:tabMode="scrollable"
-      app:tabSelectedTextColor="@android:color/white"
-      app:tabTextAppearance="@style/TabTextStyle" />
+      app:title="@string/activity_animation_mock_title" />
 
   </com.google.android.material.appbar.AppBarLayout>
 
-  <androidx.viewpager.widget.ViewPager
+  <androidx.viewpager2.widget.ViewPager2
     android:id="@+id/viewPager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.drakeet.multitype.ItemViewBinder
 import com.zhangls.android.basic.R
 import com.zhangls.android.basic.ui.customview.CustomViewActivity
+import com.zhangls.android.basic.ui.mock.AnimationMockActivity
 
 /**
  * @author zhangls
@@ -23,6 +24,7 @@ class HomeItemViewBinder : ItemViewBinder<HomeItem, HomeItemViewBinder.ViewHolde
     holder.title.setOnClickListener {
       when (item.type) {
         HomeItemType.CustomView -> CustomViewActivity.actionStart(it.context)
+        HomeItemType.AnimationMock -> AnimationMockActivity.actionStart(it.context)
       }
     }
   }

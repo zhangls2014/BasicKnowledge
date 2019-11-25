@@ -21,6 +21,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".ui.customview.CustomViewActivity" />
+    <activity android:name=".ui.mock.AnimationMockActivity" />
   </application>
 
 </manifest>

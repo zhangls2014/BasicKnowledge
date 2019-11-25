@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="CountView">
+    <attr name="cv_textSize" format="dimension" />
+    <attr name="cv_textColor" format="color" />
+    <attr name="cv_count" format="integer" />
+    <attr name="cv_countOffset" format="integer" />
+  </declare-styleable>
+</resources>
