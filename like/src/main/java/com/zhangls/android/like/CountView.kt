@@ -7,7 +7,7 @@ import android.graphics.Color
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -113,8 +113,8 @@ class CountView : View {
       countHeight.toInt()
     }
     val animator = ObjectAnimator.ofInt(this, "countOffset", 0, endValue)
-    animator.duration = 300
-    animator.interpolator = AccelerateDecelerateInterpolator()
+    animator.duration = 500
+    animator.interpolator = DecelerateInterpolator()
     animator.start()
   }
 
@@ -143,11 +143,11 @@ class CountView : View {
       val startX = paddingStart + countPaint.measureText(texts[0])
       if (countOffset > 0) {
         // 数字变小
-        countPaint.color = getTextColor(countOffset.toFloat())
-        it.drawText(texts[1], startX, y + countOffset, countPaint)
         countPaint.color = getTextColor(countOffset - countHeight)
+        it.drawText(texts[1], startX, y + countOffset, countPaint)
+        countPaint.color = getTextColor(countOffset.toFloat())
         it.drawText(texts[2], startX, y - countHeight + countOffset, countPaint)
-      } else {
+      } else if (countOffset < 0) {
         // 数字变大
         countPaint.color = getTextColor(countHeight + countOffset)
         it.drawText(texts[1], startX, y + countOffset, countPaint)
@@ -171,14 +171,6 @@ class CountView : View {
     this.countOffset = offset
 
     postInvalidate()
-  }
-
-  /**
-   * 属性动画必须的 get 方法：countOffset
-   */
-  @SuppressWarnings("unused")
-  private fun getCountOffset(): Int {
-    return countOffset
   }
 
   fun setCount(count: Int) {

@@ -3,24 +3,42 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:gravity="center_horizontal|center_vertical"
   android:orientation="vertical"
   tools:context=".ui.mock.LikeFragment">
 
-  <com.zhangls.android.like.CountView
-    android:id="@+id/likeView"
-    android:clickable="true"
-    android:focusable="true"
+  <LinearLayout
+    android:id="@+id/llLike"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:clickable="true"
+    android:focusable="true">
+
+    <com.zhangls.android.like.LikeView
+      android:id="@+id/likeView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingBottom="8dp" />
+
+    <com.zhangls.android.like.CountView
+      android:id="@+id/countView"
+      android:layout_width="48dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      app:cv_textSize="18sp" />
+
+  </LinearLayout>
 
   <androidx.appcompat.widget.AppCompatEditText
     android:id="@+id/etNum"
     android:layout_width="180dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="32dp"
-    android:singleLine="true"
+    android:imeOptions="actionGo"
     android:inputType="number"
-    android:imeOptions="actionGo" />
+    android:singleLine="true" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
