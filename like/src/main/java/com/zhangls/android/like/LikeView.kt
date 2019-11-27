@@ -112,7 +112,7 @@ class LikeView : View {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
     // 为了美观，往右侧移动 2dp
-    val maxWidth = max(max(dislikeOriginalBitmap.width, likeOriginalBitmap.width), shiningOriginalBitmap.width + 2.dpToPxInt)
+    val maxWidth = max(max(dislikeOriginalBitmap.width, likeOriginalBitmap.width), shiningOriginalBitmap.width + 4.dpToPxInt)
     // 为光圈流出空间
     val needWidth = paddingStart + maxWidth + paddingEnd + 4.dpToPxInt
     val maxHeight = max(dislikeOriginalBitmap.height, likeOriginalBitmap.height) + (shiningOriginalBitmap.height / 2F).roundToInt()
@@ -133,7 +133,7 @@ class LikeView : View {
       if (isLike) {
         if (shiningScale > 0) {
           // 为了美观，往右侧移动 2dp
-          val shiningLeft = paddingStart + 4.dpToPx + (shiningOriginalBitmap.width - shiningBitmap.width) / 2
+          val shiningLeft = paddingStart + 6.dpToPx + (shiningOriginalBitmap.width - shiningBitmap.width) / 2
           val shiningTop = paddingTop + shiningOriginalBitmap.height - shiningBitmap.height
           it.drawBitmap(shiningBitmap, shiningLeft, shiningTop.toFloat(), bitmapPaint)
         }
