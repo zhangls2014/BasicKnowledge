@@ -3,7 +3,10 @@ package com.zhangls.android.like
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -11,6 +14,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.scale
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -18,21 +22,20 @@ import kotlin.math.roundToInt
 /**
  * 点赞 View
  *
+ * 拇指和闪光构成了整个 View，拇指和闪光不能通过属性自行设置（因为不同的图片会导致宽高和重叠区域的不同）
+ * 自带的拇指和闪光是宽高均为 24dp 的矢量图，重叠部分为 1/3 闪光高度
+ *
+ * 属性：LikeWidth 是指拇指视图的长宽
+ *
  * @author zhangls
  */
 class LikeView : View {
   // 未点赞 Drawable
-  private val dislikeOriginalBitmap: Bitmap by lazy {
-    BitmapFactory.decodeResource(resources, R.drawable.ic_like_unselected)
-  }
+  private lateinit var dislikeOriginalBitmap: Bitmap
   // 已点赞 Drawable
-  private val likeOriginalBitmap: Bitmap by lazy {
-    BitmapFactory.decodeResource(resources, R.drawable.ic_like_selected)
-  }
+  private lateinit var likeOriginalBitmap: Bitmap
   // 闪光 Drawable
-  private val shiningOriginalBitmap: Bitmap by lazy {
-    BitmapFactory.decodeResource(resources, R.drawable.ic_like_shining)
-  }
+  private lateinit var shiningOriginalBitmap: Bitmap
   // paint
   private val bitmapPaint: Paint by lazy { Paint() }
   // paint
@@ -46,9 +49,11 @@ class LikeView : View {
   // 选中状态：false 为未选中
   private var isLike: Boolean = false
   // 显示的大拇指
-  private var thumbBitmap: Bitmap = dislikeOriginalBitmap
+  private lateinit var thumbBitmap: Bitmap
   // 显示的闪光
-  private var shiningBitmap: Bitmap = shiningOriginalBitmap
+  private lateinit var shiningBitmap: Bitmap
+  // 设定的宽高，用于随意限制视图的大小
+  private var likeWidth: Int = 24.dpToPxInt
 
   // 点赞缩小比例
   private var likeBeforeScale: Float = 0F
@@ -106,17 +111,27 @@ class LikeView : View {
 
   constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0)
 
-  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+  constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+    val typedArray = context.obtainStyledAttributes(attrs, R.styleable.LikeView)
+
+    val originalBitmap = BitmapUtil.getBitmap(context, R.drawable.ic_like_unselected)
+    val sideLength = typedArray.getDimensionPixelSize(R.styleable.LikeView_lv_likeWidth, originalBitmap.width)
+    likeWidth = if (sideLength >= originalBitmap.width) originalBitmap.width else sideLength
+    typedArray.recycle()
+
+    dislikeOriginalBitmap = originalBitmap.scale(likeWidth, likeWidth)
+    likeOriginalBitmap = BitmapUtil.getBitmap(context, R.drawable.ic_like_selected).scale(likeWidth, likeWidth)
+    shiningOriginalBitmap = BitmapUtil.getBitmap(context, R.drawable.ic_like_shining).scale(likeWidth, likeWidth)
+
+    thumbBitmap = dislikeOriginalBitmap
+    shiningBitmap = shiningOriginalBitmap
+  }
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-    // 为了美观，往右侧移动 2dp
-    val maxWidth = max(max(dislikeOriginalBitmap.width, likeOriginalBitmap.width), shiningOriginalBitmap.width + 4.dpToPxInt)
-    // 为光圈流出空间
-    val needWidth = paddingStart + maxWidth + paddingEnd + 4.dpToPxInt
-    val maxHeight = max(dislikeOriginalBitmap.height, likeOriginalBitmap.height) + (shiningOriginalBitmap.height / 2F).roundToInt()
-    val needHeight = paddingTop + maxHeight + paddingBottom + 2.dpToPxInt
+    // 为光圈流出空间（手指的左侧、右侧、下方 分别留出 2dp 间隔）
+    val needWidth = paddingStart + likeWidth + paddingEnd + 4.dpToPxInt
+    val needHeight = paddingTop + 5 * likeWidth / 3 + paddingBottom + 2.dpToPxInt
 
     val contentWidth = resolveSize(needWidth, widthMeasureSpec)
     val contentHeight = resolveSize(needHeight, heightMeasureSpec)
@@ -126,26 +141,20 @@ class LikeView : View {
 
   override fun onDraw(canvas: Canvas?) {
     canvas?.let {
-      val likeLeft = (width - paddingStart - paddingEnd - thumbBitmap.width) / 2F + paddingStart + 2.dpToPxInt
-      val oldLikeHeight = height - paddingTop - paddingBottom - 2.dpToPxInt - shiningOriginalBitmap.height / 2F
-      val likeTop = height - paddingBottom - 2.dpToPxInt - oldLikeHeight / 2 - thumbBitmap.height / 2F
-
-      if (isLike) {
-        if (shiningScale > 0) {
-          // 为了美观，往右侧移动 2dp
-          val shiningLeft = paddingStart + 6.dpToPx + (shiningOriginalBitmap.width - shiningBitmap.width) / 2
-          val shiningTop = paddingTop + shiningOriginalBitmap.height - shiningBitmap.height
-          it.drawBitmap(shiningBitmap, shiningLeft, shiningTop.toFloat(), bitmapPaint)
-        }
-
-        it.drawBitmap(thumbBitmap, likeLeft, likeTop, bitmapPaint)
-      } else {
-        it.drawBitmap(thumbBitmap, likeLeft, likeTop, bitmapPaint)
+      if (isLike && shiningScale > 0) {
+        val shiningLeft = paddingStart + (likeWidth - shiningBitmap.width) / 2F + 2.dpToPx
+        val shiningTop = paddingTop + likeWidth - shiningBitmap.height
+        it.drawBitmap(shiningBitmap, shiningLeft, shiningTop.toFloat(), bitmapPaint)
       }
+
+      val likeLeft = (likeWidth - thumbBitmap.width) / 2F + paddingStart + 2.dpToPx
+      val likeTop = height - paddingBottom - 2.dpToPx - likeWidth / 2 - thumbBitmap.height / 2F
+      it.drawBitmap(thumbBitmap, likeLeft, likeTop, bitmapPaint)
+
       if (haloRadius > 0) {
         // 触发了点击效果
         val cx = (width - paddingStart - paddingEnd) / 2F + paddingStart
-        val cy = height - paddingBottom - 2.dpToPxInt - oldLikeHeight / 2
+        val cy = height - paddingBottom - 2.dpToPx - likeWidth / 2
         // 如果光圈半径的最大半径的 80% ~ 100% 之间，则光圈透明度随半径变化
         if (haloRadius >= haloMaxRadius * 0.8 && haloRadius <= haloMaxRadius) {
           haloPaint.alpha = ((haloMaxRadius - haloRadius) / haloMaxRadius * 255).roundToInt()

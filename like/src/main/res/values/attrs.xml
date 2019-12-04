@@ -6,4 +6,8 @@
     <attr name="cv_count" format="integer" />
     <attr name="cv_countOffset" format="integer" />
   </declare-styleable>
+
+  <declare-styleable name="LikeView">
+    <attr name="lv_likeWidth" format="dimension" />
+  </declare-styleable>
 </resources>
